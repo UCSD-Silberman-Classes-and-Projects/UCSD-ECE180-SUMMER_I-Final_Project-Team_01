@@ -1,13 +1,5 @@
 # Edge-AI Mobile Plant Assistant and Watering Station w/ Display
 
-<p align="center">
-  <img src="images/MPAPhoto.jpg" alt="Mobile Robot" width="48%" />
-  <img src="images/Stationphoto.jpg" alt="Stationary Pump" width="48%" />
-</p>
-<p align="center">
-  <em>Left: The mobile robot equipped with a camera. Right: The stationary water dispenser and moisture sensor.</em>
-</p>
-
 ### ECE 180 Final Project
 **Team 01 Summer Session I 2026**
 
@@ -20,6 +12,14 @@
 * **Javier Avila** - Major: Electrical Engineering
 
 ---
+
+<p align="center">
+  <img src="images/MPAPhoto.jpg" alt="Mobile Robot" width="48%" />
+  <img src="images/Stationphoto.jpg" alt="Stationary Pump" width="48%" />
+</p>
+<p align="center">
+  <em>Left: The mobile robot equipped with a camera. Right: The stationary water dispenser and moisture sensor.</em>
+</p>
 
 ## Abstract
 
