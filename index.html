@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Interactive Control Center</title>
+    <style>
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, sans-serif;
+            text-align: center;
+            padding-top: 40px;
+        }
+        .grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #1e293b;
+            padding: 25px;
+            width: 220px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+        .status-card {
+            background: #1e293b;
+            margin: 30px auto;
+            max-width: 520px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 40px auto;
+            max-width: 800px;
+        }
+        .btn {
+            padding: 22px 44px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            transition: all 0.15s ease;
+            color: #ffffff;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+            filter: brightness(1.15);
+        }
+        .btn:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none;
+        }
+        .btn-healthy { background: #2ea44f; border-bottom: 5px solid #227a3a; }
+        .btn-wilted { background: #d29922; border-bottom: 5px solid #a37413; }
+        .btn-dead { background: #484f58; border-bottom: 5px solid #30363d; }
+
+        h2 { color: #38bdf8; font-size: 2.5rem; margin: 10px 0 0 0; }
+        p { margin: 5px 0; color: #94a3b8; }
+
+        #status-text {
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin: 10px 0 0 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .alert-blink { animation: warningBlink 1s infinite; }
+        @keyframes warningBlink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; }
+}
+    </style>
+</head>
+<body>
+
+    <h1>🌿 Mobile Plant Assistant</h1>
+
+    <div class="grid">
+        <div class="card">
+            <p>Soil Moisture</p>
+            <h2 id="moisture-val">--%</h2>
+        </div>
+
+        <div class="card">
+            <p>Reservoir Level</p>
+            <h2 id="reservoir-val">--%</h2>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button id="btn-h" class="btn btn-healthy"
+onclick="handleOption('healthy')">HEALTHY</button>
+        <button id="btn-w" class="btn btn-wilted"
+onclick="handleOption('wilted')">WILTED</button>
+        <button id="btn-dead" class="btn btn-dead"
+onclick="handleOption('dead')">DEAD</button>
+    </div>
+
+<div class="status-card">
+    <p>Current Operational Status</p>
+    <div id="status-text">Ready to Assist</div>
+</div>
+
+<script>
+    let globalMoisturePercent = 0;
+    let isReservoirEmpty = false;
+    let isActionRunning = false;
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function mapValue(val, dryEmpty, wetFull) {
+        let percent = ((dryEmpty - val) / (dryEmpty - wetFull)) * 100;
+        return Math.round(Math.max(0, Math.min(100, percent)));
+    }
+
+    function getReservoirPercentage(val) {
+        if (val >= 800) return 0;
+        if (val <= 300) return 100;
+        if (val > 350) return Math.round(((800 - val) / (800 - 350)) * 25);
+        return Math.round(25 + (((350 - val) / (350 - 300)) * 75));
+    }
+async function fetchTelemetry() {
+    if (isActionRunning) return;
+    try {
+        const response = await fetch('/api/data');
+        const data = await response.json();
+
+        const statusEl = document.getElementById('status-text');
+        const rawMoisture = parseInt(data.moisture) || 1000;
+        const rawReservoir = parseInt(data.reservoir) || 800;
+        globalMoisturePercent = mapValue(rawMoisture, 1000, 380);
+        const reservoirPercent = getReservoirPercentage(rawReservoir);
+
+        document.getElementById('moisture-val').textContent = globalMoisturePercent +
+    "%";
+        document.getElementById('reservoir-val').textContent = reservoirPercent + "%";
+        // FIXED: Triggers empty state lockout when reservoir percentage drops under 20%
+        isReservoirEmpty = (reservoirPercent < 20);
+        if (isReservoirEmpty) {
+            statusEl.textContent = "Water reservoir is empty please refill";
+            statusEl.style.color = "#f85149";
+            statusEl.classList.add("alert-blink");
+            toggleButtons(true);
+        } else {
+            statusEl.textContent = "Ready to Assist";
+            statusEl.style.color = "#38bdf8";
+            statusEl.classList.remove("alert-blink");
+            toggleButtons(false);
+        }
+} catch (err) { console.error(err); }
+}
+
+function toggleButtons(disabled) {
+    document.getElementById('btn-h').disabled = disabled;
+    document.getElementById('btn-w').disabled = disabled;
+    document.getElementById('btn-dead').disabled = disabled;
+}
+
+function setDisplayState(text, color, blink=false) {
+    const el = document.getElementById('status-text');
+    el.textContent = text;
+    el.style.color = color;
+    if (blink) el.classList.add("alert-blink");
+    else el.classList.remove("alert-blink");
+}
+
+function startCountdown(seconds, onComplete) {
+    let count = seconds;
+    setDisplayState(`Watering in ${count}s...`, "#fbbf24");
+
+    let timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+            setDisplayState(`Watering in ${count}s...`, "#fbbf24");
+        } else {
+            clearInterval(timer);
+            onComplete();
+        }
+    }, 1000);
+}
+
+function handleOption(choice) {
+    if (isReservoirEmpty || isActionRunning) return;
+    isActionRunning = true;
+    toggleButtons(true);
+
+    if (choice === 'healthy') {
+        if (globalMoisturePercent < 50) {
+            startCountdown(5, () => executeWateringSequence("healthy"));
+        } else {
+        setDisplayState("Plant has been previously watered", "#34d399");
+        resetAfterDelay(4000);
+        }
+    }
+
+    else if (choice === 'wilted') {
+        if (globalMoisturePercent < 75) {
+            startCountdown(5, () => executeWateringSequence("wilted"));
+        } else {
+            setDisplayState("wilted plant has been previously watered", "#fbbf24");
+            resetAfterDelay(4000);
+        }
+    }
+    else if (choice === 'dead') {
+        setDisplayState("looks like your plant has passed, I am sorry for your loss",
+        "#94a3b8");
+        resetAfterDelay(6000);
+    }
+}
+
+async function executeWateringSequence(label) {
+    const lbl = document.getElementById('status-text');
+
+    try {
+        lbl.textContent = "watering in process";
+        lbl.style.color = "#60a5fa";
+
+        await fetch('/api/timed/on');
+        await delay(3000);
+        await fetch('/api/timed/off');
+
+        lbl.textContent = "Watering Complete!";
+        lbl.style.color = "#34d399";
+        resetAfterDelay(3000);
+
+        } catch (e) {
+            console.error("Communication failure:", e);
+            lbl.textContent = "Ready to Assist";
+            lbl.style.color = "#38bdf8";
+            isActionRunning = false;
+            toggleButtons(false);
+        }
+}
+
+    function resetAfterDelay(ms) {
+        setTimeout(() => {
+            isActionRunning = false;
+            toggleButtons(false);
+            fetchTelemetry();
+        }, ms); 
+    }
+
+    setInterval(fetchTelemetry, 500);
+    fetchTelemetry();
+
+</script>
+</body>
+</html>
