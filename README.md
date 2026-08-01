@@ -7,9 +7,9 @@
 
 ## Team Members
 
-* **Eric Yi** - EE, Machine Learning and Controls
-* **Kathya Romano** - EE
-* **Javier Avila** - EE
+* **Eric Yi** - Major: Electrical Engineering
+* **Kathya Romano** - Major: Electrical Engineering
+* **Javier Avila** - Major: Electrical Engineering
 
 ---
 
@@ -59,6 +59,8 @@ The Mobile Plant Assistant (MPA) is a distributed robotic system consisting of a
 * `station_server.py` (Station Board): A lightweight application that hosts the interactive webpage and processes the manual trigger inputs from the user.
 * `index.html`: The webUI interface featuring the Healthy, Wilted, and Dead operational buttons alongside the live soil moisture readings.
 * `plant_classifier.onnx`: The frozen, deployed neural network.
+* `sketch.ino`: The hardware-level C++ code that runs directly on the microcontroller to read analog sensor values (moisture and reservoir levels) and physically toggle the water pump via the Bridge library.
+* `sketch.yaml`: The configuration file that defines the board target and build properties for the Arduino environment.
 
 ### Usage Instructions
 1. **Network Setup:** Connect both the Car Board and the Station Board to the shared local network.
@@ -83,6 +85,6 @@ Special thank you to Professor Silberman and TA Jose Castillo for making this co
 
 ## Contacts
 
-* **Eric Yi** - eeyi@ucsd.edu | https://www.linkedin.com/in/theericyi/
-* **Kathya Romano** - [Email] | [LinkedIn]
-* **Javier Avila** - [Email] | [LinkedIn]
+* **Eric Yi** - eeyi@ucsd.edu | [Eric's LinkedIn](https://www.linkedin.com/in/theericyi/)
+* **Kathya Romano** - [Email] | [Kathya's LinkedIn]
+* **Javier Avila** - [Email] | [Javier's LinkedIn]
