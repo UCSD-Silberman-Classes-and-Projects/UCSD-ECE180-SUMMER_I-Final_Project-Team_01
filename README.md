@@ -68,6 +68,13 @@ The Mobile Plant Assistant (MPA) is a distributed robotic system consisting of a
 
 ---
 
+## Presentation & Demonstration
+
+* **Final Project Slides:** [View Presentation Slides](https://docs.google.com/presentation/d/1Oy7r3g3FmZLhDyl_FDwQoCNw7k2ziMkD8FnaqXkOBvw/edit?usp=sharing)
+* **Demonstration Video:** [Watch Project Demos](https://drive.google.com/file/d/1dp30PCg77CTaF5y4aawQJ_mIqyjTzGJ7/view?usp=sharing)
+
+---
+
 ## Acknowledgements
 
 Special thank you to Professor Silberman and TA Jose Castillo for making this course awesome!
