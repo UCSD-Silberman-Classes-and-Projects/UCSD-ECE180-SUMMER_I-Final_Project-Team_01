@@ -156,8 +156,8 @@ The system features an electronic cutoff zone to protect the pump motor from bur
 ## Programs Written & How to Use
 
 ### Core Files
-* `main.py` (Car Board): The primary execution loop for the mobile robot. It manages joystick inputs, captures a localized photo, runs the AI inference, and transmits the resulting status.
-* `station_server.py` (Station Board): A lightweight application that hosts the interactive webpage and processes the manual trigger inputs from the user.
+* `main.py` (MPA Board): The primary execution loop for the mobile robot. It manages joystick inputs, captures a localized photo, runs the AI inference, and transmits the resulting status.
+* `station_server.py` (Stationary Pump Board): A lightweight application that hosts the interactive webpage and processes the manual trigger inputs from the user.
 * `index.html`: The webUI interface featuring the Healthy, Wilted, and Dead operational buttons alongside the live soil moisture readings.
 * `plant_classifier.onnx`: The frozen, deployed neural network.
 * `joystick_control.ino` (MPA Board): The hardware-level C++ code that runs on the mobile robot's Arduino to read the analog joystick inputs and physically drive the chassis motors.
