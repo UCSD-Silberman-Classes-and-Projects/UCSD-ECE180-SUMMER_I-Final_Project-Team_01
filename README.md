@@ -177,8 +177,19 @@ The system features an electronic cutoff zone to protect the pump motor from bur
 * **Final Project Slides:** [View Presentation Slides](https://docs.google.com/presentation/d/1Oy7r3g3FmZLhDyl_FDwQoCNw7k2ziMkD8FnaqXkOBvw/edit?usp=sharing)
 * **Demonstration Videos:** 
     * [Water Pump Station Demo](https://drive.google.com/file/d/1dp30PCg77CTaF5y4aawQJ_mIqyjTzGJ7/view?usp=sharing)
-    * [MPA Demo](videos/mpasendingsignal.mov)
-    * [MPA Hand Gesture Control Demo](videos/handgesture.mov)
+
+* MPA Demo
+ 
+
+https://github.com/user-attachments/assets/2a32a8b9-fc57-4d76-9704-36b4f49b3864
+
+
+* MPA Hand Gesture Control Demo
+
+
+https://github.com/user-attachments/assets/30fc43a8-fa90-4879-a0ca-ef2d63bf91cc
+
+
 
 ---
 
