@@ -25,15 +25,6 @@
 
 The Mobile Plant Assistant (MPA) is a distributed robotic system consisting of a mobile robot and a stationary water pump. A user positions the robot using a joystick to take a precise photo of a target plant. An AI model running on the robot's Arduino UNO Q analyzes the captured image and sends the analysis results to the stationary water pump. The stationary pump features an interactive webpage with options for Healthy, Wilted, and Dead; using the camera's feedback, the user selects the appropriate option. The machine then dispenses water only if needed, based on the plant's condition and live readings from a soil moisture sensor. The project utilizes two Arduino UNO Q boards communicating over a localized, private wireless network. The robot's board navigates to plants and uses a custom-trained ResNet18 computer vision model (deployed via ONNX and OpenCV) to classify plant health (Healthy, Wilted, Dead, or Background). These classifications are processed entirely on the edge device and transmitted via HTTP requests to a Flask server running on the  stationary water pump's board, which determines if the plant requires watering.
 
----
-
-## Hardware Overview
-
-![Mobile Robot](insert_link_to_robot_car_photo_here.jpg)
-*Caption: The mobile robot equipped with a camera chassis mount and Arduino UNO Q.*
-
-![Stationary Pump](insert_link_to_water_station_photo_here.jpg)
-*Caption: The stationary water dispenser featuring the moisture sensor and web interface display.*
 
 ---
 
