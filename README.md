@@ -1,5 +1,13 @@
 # Edge-AI Mobile Plant Assistant and Watering Station w/ Display
 
+<p align="center">
+  <img src="images/MPAPhoto.jpg" alt="Mobile Robot" width="48%" />
+  <img src="images/Stationphoto.jpg" alt="Stationary Pump" width="48%" />
+</p>
+<p align="center">
+  <em>Left: The mobile robot equipped with a camera. Right: The stationary water dispenser and moisture sensor.</em>
+</p>
+
 ### ECE 180 Final Project
 **Team 01 Summer Session I 2026**
 
@@ -16,6 +24,16 @@
 ## Abstract
 
 The Mobile Plant Assistant (MPA) is a distributed robotic system consisting of a mobile robot and a stationary water pump. A user positions the robot using a joystick to take a precise photo of a target plant. An AI model running on the robot's Arduino UNO Q analyzes the captured image and sends the analysis results to the stationary water pump. The stationary pump features an interactive webpage with options for Healthy, Wilted, and Dead; using the camera's feedback, the user selects the appropriate option. The machine then dispenses water only if needed, based on the plant's condition and live readings from a soil moisture sensor. The project utilizes two Arduino UNO Q boards communicating over a localized, private wireless network. The robot's board navigates to plants and uses a custom-trained ResNet18 computer vision model (deployed via ONNX and OpenCV) to classify plant health (Healthy, Wilted, Dead, or Background). These classifications are processed entirely on the edge device and transmitted via HTTP requests to a Flask server running on the  stationary water pump's board, which determines if the plant requires watering.
+
+---
+
+## Hardware Overview
+
+![Mobile Robot](insert_link_to_robot_car_photo_here.jpg)
+*Caption: The mobile robot equipped with a camera chassis mount and Arduino UNO Q.*
+
+![Stationary Pump](insert_link_to_water_station_photo_here.jpg)
+*Caption: The stationary water dispenser featuring the moisture sensor and web interface display.*
 
 ---
 
@@ -59,13 +77,14 @@ The Mobile Plant Assistant (MPA) is a distributed robotic system consisting of a
 * `station_server.py` (Station Board): A lightweight application that hosts the interactive webpage and processes the manual trigger inputs from the user.
 * `index.html`: The webUI interface featuring the Healthy, Wilted, and Dead operational buttons alongside the live soil moisture readings.
 * `plant_classifier.onnx`: The frozen, deployed neural network.
-* `sketch.ino`: The hardware-level C++ code that runs directly on the microcontroller to read analog sensor values (moisture and reservoir levels) and physically toggle the water pump via the Bridge library.
+* `joystick_control.ino` (MPA Board): The hardware-level C++ code that runs on the mobile robot's Arduino to read the analog joystick inputs and physically drive the chassis motors.
+* `sketch.ino` (Stationary Pump Board): The hardware-level C++ code that runs directly on the microcontroller to read analog sensor values (moisture and reservoir levels) and physically toggle the water pump via the Bridge library.
 * `sketch.yaml`: The configuration file that defines the board target and build properties for the Arduino environment.
 
 ### Usage Instructions
 1. **Network Setup:** Connect both the Car Board and the Station Board to the shared local network.
 2. **Start the Station:** Run `python3 station_server.py` on the stationary board to boot the water pump interface and launch the webUI.
-3. **Launch the Car:** Execute the `main.py` script on the robot's Arduino UNO Q. 
+3. **Launch the Car:** Ensure `joystick_control.ino` is uploaded to the car's Arduino, then execute the `main.py` script on the robot's Arduino UNO Q to handle the camera and AI. 
 4. **Operation:** Position the robot with the joystick to take a precise photo of the plant. Using the feedback provided by the camera, use the interactive webpage on the stationary pump to select the appropriate condition (Healthy, Wilted, or Dead) to dispense water.
 
 ---
@@ -73,7 +92,10 @@ The Mobile Plant Assistant (MPA) is a distributed robotic system consisting of a
 ## Presentation & Demonstration
 
 * **Final Project Slides:** [View Presentation Slides](https://docs.google.com/presentation/d/1Oy7r3g3FmZLhDyl_FDwQoCNw7k2ziMkD8FnaqXkOBvw/edit?usp=sharing)
-* **Demonstration Video:** [Watch Project Demos](https://drive.google.com/file/d/1dp30PCg77CTaF5y4aawQJ_mIqyjTzGJ7/view?usp=sharing)
+* **Demonstration Videos:** 
+    * [Water Pump Station Demo](https://drive.google.com/file/d/1dp30PCg77CTaF5y4aawQJ_mIqyjTzGJ7/view?usp=sharing)
+    * [MPA Demo](videos/mpasendingsignal.mov)
+    * [MPA Hand Gesture Control Demo](videos/handgesture.mov)
 
 ---
 
@@ -86,5 +108,5 @@ Special thank you to Professor Silberman and TA Jose Castillo for making this co
 ## Contacts
 
 * **Eric Yi** - eeyi@ucsd.edu | [Eric's LinkedIn](https://www.linkedin.com/in/theericyi/)
-* **Kathya Romano** - [Email] | [Kathya's LinkedIn]
-* **Javier Avila** - [Email] | [Javier's LinkedIn]
+* **Kathya Romano** - kromanotepozteco@ucsd.edu
+* **Javier Avila** - jaa011@ucsd.edu
